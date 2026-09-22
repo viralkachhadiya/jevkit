@@ -1,0 +1,24 @@
+name: CI
+on: [push, pull_request]
+env:
+  CARGO_TERM_COLOR: always
+jobs:
+  msrv:
+    # Macros and decoding only; the client's HTTP dependencies need newer Rust.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.70.0
+      - run: cargo test --no-default-features --lib --test macros
+  stable:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets -- -D warnings
+      - run: cargo test
+      - run: cargo test --no-default-features --test macros
+      - run: cargo build --no-default-features --features client

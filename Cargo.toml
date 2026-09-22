@@ -1,0 +1,32 @@
+[package]
+name = "jevkit"
+version = "0.1.0"
+edition = "2021"
+description = "Typed Rust for TypeSafe AI's Jev: define questions as enums with macros, ask them with a built-in client, get typed answers with confidence."
+license = "MIT"
+repository = "https://github.com/viralkachhadiya/jevkit"
+authors = ["VIRAL KACHHADIYA <kachhadiya123viral@gmail.com>"]
+readme = "README.md"
+keywords = ["jev", "typesafe", "ai", "classification", "client"]
+categories = ["api-bindings", "development-tools"]
+
+[features]
+# Everything, including the built-in blocking HTTP transport.
+default = ["ureq"]
+# Request/Response types, `Client`, retries and the `Transport` trait.
+client = ["dep:serde", "dep:serde_json"]
+# Built-in blocking transport (rustls). Implies `client`.
+ureq = ["client", "dep:ureq"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", features = ["preserve_order"], optional = true }
+ureq = { version = "2", optional = true }
+
+[[test]]
+name = "client"
+required-features = ["ureq"]
+
+[[example]]
+name = "live"
+required-features = ["ureq"]
