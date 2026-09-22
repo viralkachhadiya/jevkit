@@ -121,7 +121,7 @@ impl std::error::Error for DecodeError {}
 const EPSILON: f64 = 1e-6;
 
 fn check(p: f64) -> Result<f64, DecodeError> {
-    if p.is_finite() && p >= -EPSILON && p <= 1.0 + EPSILON {
+    if p.is_finite() && (-EPSILON..=1.0 + EPSILON).contains(&p) {
         Ok(p.clamp(0.0, 1.0))
     } else {
         Err(DecodeError::InvalidProbability(p))
